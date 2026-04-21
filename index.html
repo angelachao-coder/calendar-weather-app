@@ -7,381 +7,214 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="行事曆助手">
 <meta name="theme-color" content="#FAFAF8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%236366f1'/%3E%3Crect x='80' y='140' width='352' height='292' rx='32' fill='white' opacity='.95'/%3E%3Crect x='80' y='100' width='352' height='80' rx='32' fill='white'/%3E%3Ccircle cx='176' cy='100' r='20' fill='%236366f1'/%3E%3Ccircle cx='336' cy='100' r='20' fill='%236366f1'/%3E%3Crect x='136' y='210' width='72' height='8' rx='4' fill='%236366f1' opacity='.7'/%3E%3Crect x='136' y='250' width='100' height='8' rx='4' fill='%23e8c4c4' opacity='.7'/%3E%3Crect x='136' y='290' width='56' height='8' rx='4' fill='%23c4ddb4' opacity='.7'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%236366f1'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white'%3E%F0%9F%93%85%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi6KGM5LqL5pqG5aSp5rCj5Yqp5omLIiwic2hvcnRfbmFtZSI6IuihjOS6i+abnCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRkFGQUY4IiwidGhlbWVfY29sb3IiOiIjNjM2NmYxIn0=">
 <title>行事曆天氣助手</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,'Noto Sans TC','Helvetica Neue',sans-serif;background:#FAFAF8;color:#2d2d2d;max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overscroll-behavior:none}
-button{font-family:inherit;border:none;cursor:pointer;-webkit-appearance:none}
+body{font-family:-apple-system,'Noto Sans TC','Helvetica Neue',sans-serif;background:#FAFAF8;color:#2d2d2d;max-width:480px;margin:0 auto;min-height:100vh;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overscroll-behavior:none}
+button,input,textarea,select{font-family:inherit;border:none;cursor:pointer;outline:none}
 ::-webkit-scrollbar{display:none}
+@keyframes sd{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
 .header{display:flex;justify-content:space-between;align-items:flex-start;padding:28px 20px 0}
-.date-num{font-size:46px;font-weight:200;color:#1a1a1a;line-height:1;letter-spacing:-2px}
-.date-sub{font-size:13px;color:#aaa;margin-top:4px;letter-spacing:.5px}
 .top-right{display:flex;align-items:center;gap:8px;margin-top:6px}
 .avatar{width:32px;height:32px;border-radius:50%;border:2px solid #f0eeeb;object-fit:cover}
-.sb{width:38px;height:38px;border-radius:50%;border:1px solid #e8e8e5;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;color:#999;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.sb:active{transform:scale(.92)}
-.sp{margin:14px 20px 0;background:#fff;border-radius:18px;padding:22px;border:1px solid #f0eeeb;box-shadow:0 2px 12px rgba(0,0,0,.03);animation:sd .25s ease}
-@keyframes sd{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.sl{font-size:11px;color:#aaa;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-.sl:not(:first-child){margin-top:18px}
+.sb{width:38px;height:38px;border-radius:50%;border:1px solid #e8e8e5;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;color:#999;box-shadow:0 1px 4px rgba(0,0,0,.04)}.sb:active{transform:scale(.92)}
+.sp{margin:14px 20px 0;background:#fff;border-radius:18px;padding:22px;border:1px solid #f0eeeb;animation:sd .25s ease}
+.sl{font-size:11px;color:#aaa;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}.sl:not(:first-child){margin-top:18px}
 .srow{display:flex;gap:6px}
-.sbt{flex:1;padding:10px 0;border-radius:10px;font-size:13px;color:#999;background:#FAFAF8;border:1px solid #eee}
-.sbt.a{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
-.sbt:active{transform:scale(.96)}
-.wb{margin:20px 20px 0;padding:18px 20px;background:#fff;border-radius:18px;border:1px solid #f0eeeb;box-shadow:0 1px 6px rgba(0,0,0,.03)}
-.wb:active{transform:scale(.985)}
-.wt{display:flex;justify-content:space-between;align-items:center}
-.wl{display:flex;align-items:center;gap:14px}
-.wi{font-size:36px}
-.wtp{font-size:28px;font-weight:200;color:#1a1a1a}
-.wds{font-size:12px;color:#bbb;margin-top:1px}
+.sbt{flex:1;padding:10px 0;border-radius:10px;font-size:13px;color:#999;background:#FAFAF8;border:1px solid #eee}.sbt.a{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}.sbt:active{transform:scale(.96)}
+.wb{margin:20px 20px 0;padding:18px 20px;background:#fff;border-radius:18px;border:1px solid #f0eeeb;box-shadow:0 1px 6px rgba(0,0,0,.03)}.wb:active{transform:scale(.985)}
+.wt{display:flex;justify-content:space-between;align-items:center}.wl{display:flex;align-items:center;gap:14px}
 .wp{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500}
 .wtg{font-size:11px;color:#ccc;text-align:center;margin-top:10px}
 .wdt{margin:0 20px;background:#fff;border-radius:0 0 18px 18px;border:1px solid #f0eeeb;border-top:1px dashed #f5f4f1;padding:16px 12px;animation:sd .2s ease}
-.frow{display:flex;gap:2px}
-.fd{text-align:center;flex:1;padding:8px 2px}
-.fdl{font-size:11px;color:#bbb}
-.fdl.today{color:#1a1a1a;font-weight:600}
-.fdi{font-size:22px;margin:6px 0}
-.fdm{font-size:12px;font-weight:500;color:#555}
-.fdn{font-size:11px;color:#ccc}
-.fdr{font-size:10px;color:#a8c8e8;margin-top:3px}
+.frow{display:flex;gap:2px}.fd{text-align:center;flex:1;padding:8px 2px}
+.tabs{display:flex;margin:20px 20px 0;background:#fff;border-radius:14px;border:1px solid #f0eeeb;overflow:hidden}.tab{flex:1;padding:12px 0;text-align:center;font-weight:500;color:#aaa;background:transparent}.tab.a{color:#1a1a1a;background:#f5f4f1}
 .ev{padding:0 20px}
-.dlab{font-size:13px;font-weight:600;color:#1a1a1a;margin-top:24px;margin-bottom:10px;letter-spacing:.5px}
-.ec{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:8px;border:1px solid #f0eeeb;box-shadow:0 1px 3px rgba(0,0,0,.02);display:flex;align-items:center;gap:12px}
-.ec:active{transform:scale(.98)}
-.ebar{width:3px;height:30px;border-radius:2px;flex-shrink:0}
-.etit{font-size:14px;font-weight:500;color:#2d2d2d;line-height:1.4}
-.etm{font-size:12px;color:#bbb;margin-top:2px}
-.eloc{font-size:12px;color:#b8c9e8;margin-top:1px}
-.emp{font-size:13px;color:#ddd;font-style:italic;padding:10px 0}
+.ec{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:8px;border:1px solid #f0eeeb;display:flex;align-items:flex-start;gap:12px;cursor:pointer}.ec:active{transform:scale(.98)}
+.ebar{width:3px;min-height:36px;border-radius:2px;flex-shrink:0;margin-top:2px}
+.emp{color:#ddd;font-style:italic;padding:10px 0}
+.rb{display:block;padding:15px;border-radius:14px;color:#fff;font-weight:500;background:#1a1a1a}.rb:active{transform:scale(.97);opacity:.85}.rb:disabled{opacity:.4}
+.err{margin:12px 20px 0;padding:12px 16px;background:#fff5f5;border-radius:12px;font-size:13px;color:#e88}
 .ft{text-align:center;font-size:11px;color:#ccc;padding:20px 0 32px}
 .login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:85vh;padding:40px 30px;text-align:center}
-.login-icon{font-size:64px;margin-bottom:20px}
-.login-title{font-size:24px;font-weight:300;color:#1a1a1a;margin-bottom:8px}
-.login-desc{font-size:14px;color:#aaa;line-height:1.6;margin-bottom:36px;max-width:280px}
-.g-btn{display:flex;align-items:center;gap:12px;padding:14px 28px;background:#fff;border:1px solid #e0e0e0;border-radius:14px;font-size:15px;font-weight:500;color:#3c4043;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.g-btn:active{transform:scale(.97)}
-.g-btn svg{width:20px;height:20px}
-.user-bar{margin:16px 20px 0;padding:12px 16px;background:#fff;border-radius:14px;border:1px solid #f0eeeb;display:flex;align-items:center;gap:10px;font-size:13px}
-.user-bar .nm{flex:1;font-weight:500;color:#2d2d2d}
-.user-bar .lo{font-size:12px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee}
-.rb{display:block;margin:22px 20px 0;padding:15px;border-radius:14px;color:#fff;font-size:14px;font-weight:500;width:calc(100% - 40px);background:#1a1a1a}
-.rb:active{transform:scale(.97);opacity:.85}
-.rb:disabled{opacity:.4}
-.err{margin:12px 20px 0;padding:12px 16px;background:#fff5f5;border-radius:12px;font-size:13px;color:#e88}
-.ph{text-align:center;padding:40px 0;color:#ddd}
-.phi{font-size:40px;margin-bottom:8px}
-.pht{font-size:13px}
-.setup-box{margin:20px;padding:24px;background:#fff;border-radius:18px;border:1px solid #f0eeeb}
-.setup-box h3{font-size:15px;font-weight:600;margin-bottom:12px}
-.setup-box ol{padding-left:20px;font-size:13px;color:#666;line-height:2.2}
-.setup-box a{color:#6366f1}
-.cid-input{width:100%;padding:12px 14px;border:1px solid #e8e8e5;border-radius:10px;font-size:12px;margin:12px 0;outline:none;font-family:monospace;background:#FAFAF8}
-.cid-input:focus{border-color:#1a1a1a}
+.g-btn{display:flex;align-items:center;gap:12px;padding:14px 28px;background:#fff;border:1px solid #e0e0e0;border-radius:14px;font-size:15px;font-weight:500;color:#3c4043;box-shadow:0 2px 8px rgba(0,0,0,.06)}.g-btn:active{transform:scale(.97)}.g-btn svg{width:20px;height:20px}
+.user-bar{margin:16px 20px 0;padding:12px 16px;background:#fff;border-radius:14px;border:1px solid #f0eeeb;display:flex;align-items:center;gap:10px}
+.setup-box{margin:20px;padding:24px;background:#fff;border-radius:18px;border:1px solid #f0eeeb}.setup-box h3{font-size:15px;font-weight:600;margin-bottom:12px}.setup-box ol{padding-left:20px;font-size:13px;color:#666;line-height:2.2}.setup-box a{color:#6366f1}
+.cid-input{width:100%;padding:12px 14px;border:1px solid #e8e8e5;border-radius:10px;font-size:12px;margin:12px 0;font-family:monospace;background:#FAFAF8}.cid-input:focus{border-color:#1a1a1a}
 .cid-save{padding:12px 24px;background:#1a1a1a;color:#fff;border-radius:10px;font-size:14px;font-weight:500;width:100%}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.3);display:flex;align-items:flex-end;justify-content:center;z-index:100;animation:fadeIn .2s}
+.sheet{background:#FAFAF8;border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:85vh;overflow:auto;padding:24px 20px 40px;animation:sd .3s ease}
+.finput{width:100%;padding:12px 14px;border:1px solid #e8e8e5;border-radius:12px;background:#fff;margin-top:6px}
+.finput:focus{border-color:#1a1a1a}
+.flabel{font-size:11px;color:#aaa;font-weight:600;letter-spacing:.5px;margin-top:14px;display:block}
+.memo-add{display:flex;gap:8px;margin-bottom:16px}
+.memo-input{flex:1;padding:12px 14px;border:1px solid #e8e8e5;border-radius:12px;background:#fff;font-family:inherit}.memo-input:focus{border-color:#1a1a1a}
+.memo-btn{padding:12px 18px;background:#1a1a1a;color:#fff;border-radius:12px;font-weight:500;white-space:nowrap}
+.mi{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:8px;border:1px solid #f0eeeb;display:flex;align-items:center;gap:12px}
+.mi.done{opacity:.5}
+.mchk{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:transparent;background:transparent}.mchk.checked{background:#1a1a1a;border-color:#1a1a1a;color:#fff}
+.mdel{font-size:16px;color:#ddd;padding:4px 8px;background:transparent}.mdel:active{color:#e88}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-var WEATHER_URL = "https://api.open-meteo.com/v1/forecast";
-var GCAL_API = "https://www.googleapis.com/calendar/v3";
-var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+var WEATHER_URL="https://api.open-meteo.com/v1/forecast";
+var GCAL_API="https://www.googleapis.com/calendar/v3";
+// READ + WRITE scope for full CRUD
+var SCOPES="https://www.googleapis.com/auth/calendar";
+var WMO={0:{i:"\u2600\uFE0F",l:"\u6674\u5929"},1:{i:"\uD83C\uDF24\uFE0F",l:"\u5927\u81F4\u6674\u6717"},2:{i:"\u26C5",l:"\u591A\u96F2"},3:{i:"\u2601\uFE0F",l:"\u9670\u5929"},45:{i:"\uD83C\uDF2B\uFE0F",l:"\u9727"},51:{i:"\uD83C\uDF26\uFE0F",l:"\u5C0F\u96E8"},61:{i:"\uD83C\uDF27\uFE0F",l:"\u5C0F\u96E8"},63:{i:"\uD83C\uDF27\uFE0F",l:"\u4E2D\u96E8"},65:{i:"\uD83C\uDF27\uFE0F",l:"\u5927\u96E8"},80:{i:"\uD83C\uDF26\uFE0F",l:"\u9663\u96E8"},95:{i:"\u26C8\uFE0F",l:"\u96F7\u66B4"}};
+var wI=function(c){return WMO[c]||{i:"\uD83C\uDF21\uFE0F",l:"\u672A\u77E5"}};
+var CL=["#b8c9e8","#e8c4c4","#c4ddb4","#e8d8b4","#d4c4e8","#b4d8d4","#e8b4c8"];
+var DZ=["\u9031\u65E5","\u9031\u4E00","\u9031\u4E8C","\u9031\u4E09","\u9031\u56DB","\u9031\u4E94","\u9031\u516D"];
+var MZ=["\u4E00\u6708","\u4E8C\u6708","\u4E09\u6708","\u56DB\u6708","\u4E94\u6708","\u516D\u6708","\u4E03\u6708","\u516B\u6708","\u4E5D\u6708","\u5341\u6708","\u5341\u4E00\u6708","\u5341\u4E8C\u6708"];
+var FS={small:{b:12,t:13,e:12,tm:11,w:24,dn:38,tb:12,d:12,lb:10},medium:{b:14,t:14,e:14,tm:12,w:28,dn:46,tb:13,d:13,lb:11},large:{b:16,t:16,e:16,tm:14,w:32,dn:52,tb:15,d:15,lb:12}};
 
-var WMO = {
-  0:{i:"☀️",l:"晴天"},1:{i:"🌤️",l:"大致晴朗"},2:{i:"⛅",l:"多雲"},3:{i:"☁️",l:"陰天"},
-  45:{i:"🌫️",l:"霧"},48:{i:"🌫️",l:"霧凇"},51:{i:"🌦️",l:"小毛雨"},53:{i:"🌦️",l:"中毛雨"},
-  55:{i:"🌧️",l:"大毛雨"},61:{i:"🌧️",l:"小雨"},63:{i:"🌧️",l:"中雨"},65:{i:"🌧️",l:"大雨"},
-  71:{i:"🌨️",l:"小雪"},73:{i:"🌨️",l:"中雪"},75:{i:"❄️",l:"大雪"},
-  80:{i:"🌦️",l:"陣雨"},81:{i:"🌧️",l:"中陣雨"},82:{i:"⛈️",l:"大陣雨"},
-  95:{i:"⛈️",l:"雷暴"},96:{i:"⛈️",l:"雷暴+冰雹"},99:{i:"⛈️",l:"強雷暴+冰雹"}
-};
-var wI = function(c) { return WMO[c] || {i:"🌡️",l:"未知"}; };
-var CL = ["#b8c9e8","#e8c4c4","#c4ddb4","#e8d8b4","#d4c4e8","#b4d8d4","#e8b4c8","#c4c8e8","#d8e8b4","#b4c4d8"];
-var DZ = ["週日","週一","週二","週三","週四","週五","週六"];
-var MZ = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+var S={page:"loading",clientId:null,token:null,user:null,days:3,autoMin:0,fontSize:"medium",events:null,weather:null,loading:false,error:null,lastUpdate:null,showSettings:false,showWeather:false,loc:{lat:25.033,lon:121.565,name:"\u53F0\u5317"},locLoading:false,tab:"cal",memos:[],detailId:null,showForm:false,editId:null,confirmDel:null,form:{title:"",date:"",start:"09:00",end:"10:00",organizer:"",desc:"",loc:"",allDay:false,attendees:""},saving:false};
+var tmr=null,tokenClient=null;
+function f(){return FS[S.fontSize]}
+function tK(){return new Date().toISOString().split("T")[0]}
+function fT(dt){return new Date(dt).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false})}
+function fD(d){return new Date(d).getMonth()+1+"/"+new Date(d).getDate()}
+function iA(e){return e.start&&e.start.date&&!e.start.dateTime}
 
-var S = {
-  page: "loading", clientId: null, token: null, user: null,
-  days: 3, autoMin: 0, events: null, weather: null,
-  loading: false, error: null, lastUpdate: null,
-  showSettings: false, showWeather: false,
-  loc: {lat:25.033, lon:121.565, name:"台北"}, locLoading: false
-};
-var tmr = null, tokenClient = null;
+// Memo
+function loadMemos(){try{var d=localStorage.getItem("gcal_memos");if(d)S.memos=JSON.parse(d)}catch(e){}}
+function saveMemos(){try{localStorage.setItem("gcal_memos",JSON.stringify(S.memos))}catch(e){}}
+function addMemo(){var el=document.getElementById("memoInput");if(!el||!el.value.trim())return;S.memos.unshift({id:Date.now(),text:el.value.trim(),done:false});saveMemos();render()}
+function toggleMemo(id){S.memos.forEach(function(m){if(m.id===id)m.done=!m.done});saveMemos();render()}
+function delMemo(id){S.memos=S.memos.filter(function(m){return m.id!==id});saveMemos();render()}
 
-function fT(dt) { return new Date(dt).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false}); }
-function fD(d) { return new Date(d).getMonth()+1 + "/" + new Date(d).getDate(); }
-function iA(e) { return e.start && e.start.date && !e.start.dateTime; }
-function tK() { return new Date().toISOString().split("T")[0]; }
+// Location & Weather
+function detectLoc(){if(!navigator.geolocation)return;S.locLoading=true;render();navigator.geolocation.getCurrentPosition(function(p){var lat=p.coords.latitude,lon=p.coords.longitude;fetch("https://nominatim.openstreetmap.org/reverse?lat="+lat+"&lon="+lon+"&format=json&accept-language=zh-TW").then(function(r){return r.json()}).then(function(d){S.loc={lat:lat,lon:lon,name:d.address.city||d.address.town||d.address.county||"\u76EE\u524D\u4F4D\u7F6E"};S.locLoading=false;fetchWeather().then(render)}).catch(function(){S.loc={lat:lat,lon:lon,name:"\u76EE\u524D\u4F4D\u7F6E"};S.locLoading=false;fetchWeather().then(render)})},function(){S.locLoading=false;render()},{timeout:8000})}
+function fetchWeather(){return fetch(WEATHER_URL+"?latitude="+S.loc.lat+"&longitude="+S.loc.lon+"&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max&current_weather=true&timezone=auto&forecast_days="+Math.max(S.days+1,4)).then(function(r){return r.json()}).then(function(d){S.weather=d}).catch(function(){S.weather=null})}
 
-/* ===== 定位 ===== */
-function detectLoc() {
-  if (!navigator.geolocation) return;
-  S.locLoading = true; render();
-  navigator.geolocation.getCurrentPosition(function(p) {
-    var lat = p.coords.latitude, lon = p.coords.longitude;
-    fetch("https://nominatim.openstreetmap.org/reverse?lat="+lat+"&lon="+lon+"&format=json&accept-language=zh-TW")
-      .then(function(r){return r.json()})
-      .then(function(d){
-        S.loc = {lat:lat, lon:lon, name: d.address.city||d.address.town||d.address.county||"目前位置"};
-        S.locLoading = false; fetchWeather().then(render);
-      }).catch(function(){
-        S.loc = {lat:lat, lon:lon, name:"目前位置"};
-        S.locLoading = false; fetchWeather().then(render);
-      });
-  }, function(){ S.locLoading=false; render(); }, {timeout:8000});
+// Google Auth
+function loadGIS(){return new Promise(function(resolve){if(window.google&&window.google.accounts){resolve();return}var s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.onload=resolve;s.onerror=function(){S.error="\u7121\u6CD5\u8F09\u5165 Google";render()};document.head.appendChild(s)})}
+function initTokenClient(){tokenClient=google.accounts.oauth2.initTokenClient({client_id:S.clientId,scope:SCOPES,callback:function(resp){if(resp.error){S.error="\u767B\u5165\u5931\u6557: "+resp.error;render();return}S.token=resp.access_token;fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){return r.json()}).then(function(u){S.user={name:u.name,email:u.email,picture:u.picture};S.page="main";render();fetchCalendar()}).catch(function(){S.page="main";render();fetchCalendar()})}})}
+function doLogin(){if(!tokenClient)initTokenClient();tokenClient.requestAccessToken({prompt:"consent"})}
+function doLogout(){if(S.token)google.accounts.oauth2.revoke(S.token);S.token=null;S.user=null;S.events=null;S.page="login";render()}
+
+// Calendar READ
+function fetchCalendar(){if(!S.token)return;S.loading=true;S.error=null;render();var now=new Date(),end=new Date(now);end.setDate(end.getDate()+S.days);return fetch(GCAL_API+"/calendars/primary/events?timeMin="+now.toISOString()+"&timeMax="+end.toISOString()+"&singleEvents=true&orderBy=startTime&maxResults=100",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){if(r.status===401){S.error="\u767B\u5165\u904E\u671F";S.page="login";S.token=null;S.loading=false;render();return}return r.json()}).then(function(data){if(!data)return;S.events=data.items||[];S.lastUpdate=new Date();return fetchWeather()}).then(function(){S.loading=false;render()}).catch(function(e){S.error="\u8F09\u5165\u5931\u6557: "+e.message;S.loading=false;render()})}
+
+// Calendar CREATE
+function createEvent(ev){S.saving=true;render();var body={summary:ev.title,description:ev.desc||"",location:ev.loc||""};if(ev.organizer)body.description="[\u767C\u8D77\u4EBA: "+ev.organizer+"]\n"+(body.description||"");if(ev.allDay){body.start={date:ev.date};body.end={date:ev.date}}else{body.start={dateTime:ev.date+"T"+ev.start+":00",timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone};body.end={dateTime:ev.date+"T"+ev.end+":00",timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone}}if(ev.attendees){body.attendees=ev.attendees.split(/[,;\s]+/).filter(Boolean).map(function(e){return{email:e.trim()}})}return fetch(GCAL_API+"/calendars/primary/events?sendUpdates=all",{method:"POST",headers:{Authorization:"Bearer "+S.token,"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json()}).then(function(){S.saving=false;S.showForm=false;fetchCalendar()}).catch(function(e){S.error="\u65B0\u589E\u5931\u6557: "+e.message;S.saving=false;render()})}
+
+// Calendar UPDATE
+function updateEvent(id,ev){S.saving=true;render();var body={summary:ev.title,description:ev.desc||"",location:ev.loc||""};if(ev.organizer)body.description="[\u767C\u8D77\u4EBA: "+ev.organizer+"]\n"+(body.description||"");if(ev.allDay){body.start={date:ev.date};body.end={date:ev.date}}else{body.start={dateTime:ev.date+"T"+ev.start+":00",timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone};body.end={dateTime:ev.date+"T"+ev.end+":00",timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone}}if(ev.attendees){body.attendees=ev.attendees.split(/[,;\s]+/).filter(Boolean).map(function(e){return{email:e.trim()}})}return fetch(GCAL_API+"/calendars/primary/events/"+id+"?sendUpdates=all",{method:"PATCH",headers:{Authorization:"Bearer "+S.token,"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json()}).then(function(){S.saving=false;S.showForm=false;S.detailId=null;fetchCalendar()}).catch(function(e){S.error="\u66F4\u65B0\u5931\u6557: "+e.message;S.saving=false;render()})}
+
+// Calendar DELETE
+function deleteEvent(id){S.saving=true;render();return fetch(GCAL_API+"/calendars/primary/events/"+id+"?sendUpdates=all",{method:"DELETE",headers:{Authorization:"Bearer "+S.token}}).then(function(){S.saving=false;S.detailId=null;S.confirmDel=null;fetchCalendar()}).catch(function(e){S.error="\u522A\u9664\u5931\u6557: "+e.message;S.saving=false;render()})}
+
+function saveForm(){if(!S.form.title.trim())return;if(S.editId){updateEvent(S.editId,S.form)}else{createEvent(S.form)}}
+
+function setupTimer(){if(tmr)clearInterval(tmr);if(S.autoMin>0)tmr=setInterval(fetchCalendar,S.autoMin*60000)}
+function groupByDate(evts,days){var g={},t=new Date();for(var i=0;i<days;i++){var d=new Date(t);d.setDate(d.getDate()+i);g[d.toISOString().split("T")[0]]=[]}for(var j=0;j<evts.length;j++){var e=evts[j],s=(e.start&&(e.start.dateTime||e.start.date))||"",k=s.substring(0,10);if(g[k])g[k].push(e)}for(var key in g)g[key].sort(function(a,b){if(iA(a)&&!iA(b))return-1;if(!iA(a)&&iA(b))return 1;return((a.start&&a.start.dateTime)||"").localeCompare((b.start&&b.start.dateTime)||"")});return g}
+
+// Extract organizer from description
+function getOrg(evt){var d=evt.description||"";var m=d.match(/\[\u767C\u8D77\u4EBA:\s*(.+?)\]/);return m?m[1]:(evt.organizer&&evt.organizer.displayName?evt.organizer.displayName:"")}
+function getDesc(evt){return(evt.description||"").replace(/\[\u767C\u8D77\u4EBA:.+?\]\n?/,"")}
+function getAttendees(evt){return(evt.attendees||[]).map(function(a){return a.email}).join(", ")}
+
+function openNew(){S.editId=null;S.form={title:"",date:tK(),start:"09:00",end:"10:00",organizer:"",desc:"",loc:"",allDay:false,attendees:""};S.showForm=true;render()}
+function openDetail(id){S.detailId=id;S.confirmDel=null;render()}
+function openEdit(evt){S.editId=evt.id;var sd=evt.start.dateTime?evt.start.dateTime.substring(0,10):(evt.start.date||tK());var st=evt.start.dateTime?fT(evt.start.dateTime):"09:00";var et=evt.end&&evt.end.dateTime?fT(evt.end.dateTime):"10:00";S.form={title:evt.summary||"",date:sd,start:st,end:et,organizer:getOrg(evt),desc:getDesc(evt),loc:evt.location||"",allDay:iA(evt),attendees:getAttendees(evt)};S.showForm=true;S.detailId=null;render()}
+
+// ============ RENDER ============
+function render(){var app=document.getElementById("app"),fs=f();
+
+if(S.page==="loading"){app.innerHTML='<div class="login-screen"><div style="font-size:64px;margin-bottom:20px">\u23F3</div><div style="font-size:24px;font-weight:300;color:#1a1a1a">\u8F09\u5165\u4E2D...</div></div>';return}
+if(S.page==="setup"){app.innerHTML='<div style="padding:20px"><div style="text-align:center;padding:30px 0 20px"><div style="font-size:48px;margin-bottom:12px">\uD83D\uDD27</div><div style="font-size:22px;font-weight:300">\u521D\u59CB\u8A2D\u5B9A</div><div style="font-size:13px;color:#aaa;margin-top:6px">\u9700\u8981 Google OAuth Client ID</div></div><div class="setup-box"><h3>\uD83D\uDCCB \u5982\u4F55\u53D6\u5F97</h3><ol><li>\u524D\u5F80 <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console</a></li><li>\u5553\u7528 Google Calendar API</li><li>\u5EFA\u7ACB OAuth 2.0 Client ID</li><li>\u5728 JavaScript \u4F86\u6E90\u52A0\u5165\u672C\u7DB2\u5740</li><li>\u8CBC\u4E0B Client ID</li></ol><input class="cid-input" id="cidInput" placeholder="xxx.apps.googleusercontent.com"><button class="cid-save" onclick="saveClientId()">\u5132\u5B58\u4E26\u7E7C\u7E8C</button></div>'+(S.error?'<div class="err">\u26A0\uFE0F '+S.error+'</div>':'')+'</div>';return}
+if(S.page==="login"){app.innerHTML='<div class="login-screen"><div style="font-size:64px;margin-bottom:20px">\uD83D\uDCC5</div><div style="font-size:24px;font-weight:300;color:#1a1a1a;margin-bottom:8px">\u884C\u4E8B\u66C6\u5929\u6C23\u52A9\u624B</div><div style="font-size:14px;color:#aaa;line-height:1.6;margin-bottom:36px;max-width:280px">\u767B\u5165 Google \u5E33\u865F\u5F8C\u5373\u53EF\u67E5\u770B\u884C\u4E8B\u66C6\u8207\u5929\u6C23</div><button class="g-btn" onclick="doLogin()"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>\u4F7F\u7528 Google \u767B\u5165</button><div style="margin-top:24px;font-size:12px;color:#ccc"><span style="cursor:pointer;text-decoration:underline" onclick="S.page=\'setup\';S.error=null;render()">\u91CD\u65B0\u8A2D\u5B9A</span></div>'+(S.error?'<div class="err" style="margin-top:16px">\u26A0\uFE0F '+S.error+'</div>':'')+'</div>';return}
+
+// ===== MAIN =====
+var tk=tK(),td=new Date(),cw=S.weather&&S.weather.current_weather;
+var tw=S.weather&&S.weather.daily?{code:S.weather.daily.weathercode[0],max:S.weather.daily.temperature_2m_max[0],min:S.weather.daily.temperature_2m_min[0],rain:S.weather.daily.precipitation_probability_max[0],uv:S.weather.daily.uv_index_max?S.weather.daily.uv_index_max[0]:0}:null;
+var grouped=S.events?groupByDate(S.events,S.days):null;
+var h="";
+
+h+='<div class="header"><div><div style="font-size:'+fs.dn+'px;font-weight:200;color:#1a1a1a;line-height:1;letter-spacing:-2px">'+td.getDate()+'</div><div style="font-size:'+(fs.b-1)+'px;color:#aaa;margin-top:4px">'+MZ[td.getMonth()]+' \xB7 '+DZ[td.getDay()]+'</div></div><div class="top-right">'+(S.user&&S.user.picture?'<img class="avatar" src="'+S.user.picture+'" referrerpolicy="no-referrer">':'')+'<button class="sb" onclick="toggleKey(\'showSettings\')">'+(S.showSettings?'\u2715':'\u2699')+'</button></div></div>';
+
+if(S.user)h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px"><span style="flex:1;font-weight:500;color:#2d2d2d">'+(S.user.name||S.user.email)+'</span><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>';
+
+// Settings
+if(S.showSettings){h+='<div class="sp">';
+[{l:"\u986F\u793A\u5929\u6578",opts:[1,3,5,7],val:S.days,fn:"setDays",fmt:function(v){return v+"\u5929"}},{l:"\u81EA\u52D5\u66F4\u65B0",opts:[0,15,30,60],val:S.autoMin,fn:"setAuto",fmt:function(v){return v===0?"\u95DC\u9589":v<60?v+" \u5206":"1 \u5C0F\u6642"}},{l:"\u5B57\u9AD4\u5927\u5C0F",opts:["small","medium","large"],val:S.fontSize,fn:"setFS",fmt:function(v){return{small:"\u5C0F",medium:"\u4E2D",large:"\u5927"}[v]}}].forEach(function(sec,si){h+='<div class="sl"'+(si?' style="margin-top:18px"':'')+'>'+sec.l+'</div><div class="srow">';sec.opts.forEach(function(o){h+='<button class="sbt '+(sec.val===o?"a":"")+'" onclick="'+sec.fn+'(\''+o+'\')">'+sec.fmt(o)+'</button>'});h+='</div>'});
+h+='<div class="sl" style="margin-top:18px">\u4F4D\u7F6E</div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:'+(fs.b-1)+'px;color:#666">'+(S.locLoading?'\u5B9A\u4F4D\u4E2D...':'\uD83D\uDCCD '+S.loc.name)+'</span><button style="padding:6px 14px;border-radius:8px;border:1px solid #eee;background:#fff;font-size:12px;color:#999" onclick="detectLoc()">\u91CD\u65B0\u5B9A\u4F4D</button></div></div>'}
+
+// Weather
+var wIcon=cw?wI(cw.weathercode).i:tw?wI(tw.code).i:'\uD83C\uDF21\uFE0F';
+var wTemp=cw?Math.round(cw.temperature)+'\xB0':tw?Math.round(tw.max)+'\xB0':'\u2014';
+var wLabel=cw?wI(cw.weathercode).l:tw?wI(tw.code).l:'';
+h+='<div class="wb" onclick="toggleKey(\'showWeather\')"><div class="wt"><div class="wl"><span style="font-size:36px">'+wIcon+'</span><div><div style="font-size:'+fs.w+'px;font-weight:200;color:#1a1a1a">'+wTemp+'</div><div style="font-size:'+fs.tm+'px;color:#bbb;margin-top:1px">'+wLabel+' \xB7 '+S.loc.name+'</div></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+(tw?'<span class="wp" style="background:#f0f7ff;color:#7ba7d4">\uD83D\uDCA7 '+tw.rain+'%</span>':'')+(tw&&tw.uv>=6?'<span class="wp" style="background:#fff8ee;color:#d4a54a">UV '+Math.round(tw.uv)+'</span>':'')+'</div></div><div class="wtg">'+(S.showWeather?'\u6536\u8D77 \u25B2':'\u5C55\u958B\u9810\u5831 \u25BC')+'</div></div>';
+if(S.showWeather&&S.weather&&S.weather.daily){var wd=S.weather.daily;h+='<div class="wdt"><div class="frow">';wd.time.slice(0,Math.min(S.days+1,7)).forEach(function(d,i){var info=wI(wd.weathercode[i]),isT=d===tk;h+='<div class="fd"><div style="font-size:11px;color:'+(isT?'#1a1a1a':'#bbb')+';font-weight:'+(isT?'600':'400')+'">'+(isT?'\u4ECA\u5929':fD(d))+'</div><div style="font-size:22px;margin:6px 0">'+info.i+'</div><div style="font-size:12px;font-weight:500;color:#555">'+Math.round(wd.temperature_2m_max[i])+'\xB0</div><div style="font-size:11px;color:#ccc">'+Math.round(wd.temperature_2m_min[i])+'\xB0</div><div style="font-size:10px;color:#a8c8e8;margin-top:3px">'+wd.precipitation_probability_max[i]+'%</div></div>'});h+='</div></div>'}
+
+// Tabs
+h+='<div class="tabs"><button class="tab '+(S.tab==="cal"?"a":"")+'" style="font-size:'+fs.tb+'px" onclick="setTab(\'cal\')">\uD83D\uDCC5 \u884C\u4E8B\u66C6</button><button class="tab '+(S.tab==="memo"?"a":"")+'" style="font-size:'+fs.tb+'px" onclick="setTab(\'memo\')">\uD83D\uDCDD \u5099\u5FD8\u9304</button></div>';
+
+// ===== CAL TAB =====
+if(S.tab==="cal"){
+h+='<div style="display:flex;gap:8px;margin:16px 20px 0"><button class="rb" style="flex:1;font-size:'+fs.b+'px" onclick="fetchCalendar()" '+(S.loading?'disabled':'')+'>'+(S.loading?'\u540C\u6B65\u4E2D...':'\uD83D\uDD04 \u540C\u6B65')+'</button><button style="padding:15px 20px;border-radius:14px;color:#1a1a1a;font-size:'+fs.b+'px;font-weight:500;background:#fff;border:1px solid #e8e8e5" onclick="openNew()">\uFF0B \u65B0\u589E</button></div>';
+if(S.error)h+='<div class="err">\u26A0\uFE0F '+S.error+'</div>';
+h+='<div class="ev">';
+if(!S.events&&!S.loading)h+='<div style="text-align:center;padding:40px 0;color:#ddd"><div style="font-size:40px;margin-bottom:8px">\u2726</div><div style="font-size:'+fs.b+'px">\u9EDE\u64CA\u540C\u6B65\u8F09\u5165\u884C\u7A0B</div></div>';
+if(grouped){Object.keys(grouped).forEach(function(date,di){var evts=grouped[date],isT=date===tk,d=new Date(date);var label=isT?"Today":(d.getMonth()+1)+"/"+d.getDate()+" "+DZ[d.getDay()];h+='<div style="font-size:'+fs.t+'px;font-weight:600;color:#1a1a1a;margin-top:24px;margin-bottom:10px">'+label+'</div>';if(!evts.length)h+='<div class="emp" style="font-size:'+(fs.b-1)+'px">\u6C92\u6709\u884C\u7A0B</div>';else evts.forEach(function(evt,i){var title=evt.summary||'\uFF08\u7121\u6A19\u984C\uFF09';var ad=iA(evt);var st=evt.start&&evt.start.dateTime,et=evt.end&&evt.end.dateTime;var c=CL[(di*3+i)%CL.length];var org=getOrg(evt);var desc=getDesc(evt);
+h+='<div class="ec" onclick="openDetail(\''+evt.id+'\')"><div class="ebar" style="background:'+c+'"></div><div style="flex:1"><div style="font-size:'+fs.e+'px;font-weight:500;color:#2d2d2d;line-height:1.4">'+title+'</div><div style="font-size:'+fs.tm+'px;color:#bbb;margin-top:2px">'+(ad?'\u6574\u5929':st?fT(st)+(et?' \u2013 '+fT(et):''):'')+'</div>'+(org?'<div style="font-size:'+fs.tm+'px;color:#a8a8d4;margin-top:2px">\uD83D\uDC64 '+org+'</div>':'')+(desc?'<div style="font-size:'+fs.tm+'px;color:#aaa;margin-top:2px">'+(desc.length>30?desc.substring(0,30)+'...':desc)+'</div>':'')+(evt.location?'<div style="font-size:'+fs.tm+'px;color:#b8c9e8;margin-top:2px">\uD83D\uDCCD '+evt.location+'</div>':'')+(evt.attendees&&evt.attendees.length?'<div style="font-size:'+fs.tm+'px;color:#c4ddb4;margin-top:2px">\uD83D\uDC65 '+evt.attendees.length+'\u4EBA\u53C3\u52A0</div>':'')+'</div><span style="font-size:12px;color:#ddd;margin-top:2px">\u203A</span></div>'})})}
+h+='</div>';
+if(S.lastUpdate)h+='<div class="ft">\u6700\u5F8C\u540C\u6B65 '+S.lastUpdate.toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"})+(S.autoMin>0?' \xB7 \u6BCF '+S.autoMin+'\u5206\u81EA\u52D5\u66F4\u65B0':'')+'</div>';
 }
 
-/* ===== 天氣 ===== */
-function fetchWeather() {
-  return fetch(WEATHER_URL+"?latitude="+S.loc.lat+"&longitude="+S.loc.lon
-    +"&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max"
-    +"&current_weather=true&timezone=auto&forecast_days="+Math.max(S.days+1,4))
-    .then(function(r){return r.json()})
-    .then(function(d){S.weather=d})
-    .catch(function(){S.weather=null});
-}
+// ===== MEMO TAB =====
+if(S.tab==="memo"){
+var pending=S.memos.filter(function(m){return!m.done}),dn=S.memos.filter(function(m){return m.done});
+h+='<div style="padding:16px 20px 0"><div class="memo-add"><input class="memo-input" id="memoInput" style="font-size:'+fs.b+'px" placeholder="\u65B0\u589E\u5099\u5FD8\u9304..." onkeydown="if(event.key===\'Enter\')addMemo()"><button class="memo-btn" style="font-size:'+fs.b+'px" onclick="addMemo()">\u52A0\u5165</button></div>';
+if(!S.memos.length)h+='<div style="text-align:center;padding:30px 0;color:#ddd;font-size:'+fs.b+'px">\u2705 \u6C92\u6709\u5099\u5FD8\u4E8B\u9805</div>';
+pending.forEach(function(m){h+='<div class="mi"><button class="mchk" onclick="toggleMemo('+m.id+')"></button><span style="flex:1;font-size:'+fs.b+'px;color:#2d2d2d;line-height:1.4">'+m.text+'</span><button class="mdel" onclick="delMemo('+m.id+')">\u2715</button></div>'});
+if(dn.length){h+='<div style="font-size:'+fs.lb+'px;color:#bbb;margin:16px 0 8px">\u5DF2\u5B8C\u6210 ('+dn.length+')</div>';dn.forEach(function(m){h+='<div class="mi done"><button class="mchk checked" style="font-size:12px" onclick="toggleMemo('+m.id+')">\u2713</button><span style="flex:1;font-size:'+fs.b+'px;color:#bbb;line-height:1.4;text-decoration:line-through">'+m.text+'</span><button class="mdel" onclick="delMemo('+m.id+')">\u2715</button></div>'})}
+h+='</div>'}
 
-/* ===== Google 登入 ===== */
-function loadGIS() {
-  return new Promise(function(resolve) {
-    if (window.google && window.google.accounts) { resolve(); return; }
-    var s = document.createElement("script");
-    s.src = "https://accounts.google.com/gsi/client";
-    s.onload = resolve;
-    s.onerror = function(){ S.error="無法載入 Google 登入服務"; render(); };
-    document.head.appendChild(s);
-  });
-}
+// ===== DETAIL SHEET =====
+if(S.detailId&&!S.showForm){var evt=null;if(S.events)S.events.forEach(function(e){if(e.id===S.detailId)evt=e});
+if(evt){var org=getOrg(evt),desc=getDesc(evt);
+h+='<div class="overlay" onclick="S.detailId=null;S.confirmDel=null;render()"><div class="sheet" onclick="event.stopPropagation()">';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-size:'+(fs.t+4)+'px;font-weight:600;color:#1a1a1a">'+(evt.summary||'\uFF08\u7121\u6A19\u984C\uFF09')+'</div><button style="font-size:20px;color:#ccc;background:transparent;border:none" onclick="S.detailId=null;S.confirmDel=null;render()">\u2715</button></div>';
+var rows=[{icon:"\uD83D\uDCC5",label:"\u65E5\u671F",val:evt.start.dateTime?evt.start.dateTime.substring(0,10):(evt.start.date||"")},{icon:"\uD83D\uDD50",label:"\u6642\u9593",val:iA(evt)?"\u6574\u5929":(evt.start.dateTime?fT(evt.start.dateTime):"")+(evt.end&&evt.end.dateTime?" \u2013 "+fT(evt.end.dateTime):"")},{icon:"\uD83D\uDC64",label:"\u767C\u8D77\u4EBA",val:org},{icon:"\uD83D\uDCDD",label:"\u5167\u5BB9",val:desc},{icon:"\uD83D\uDCCD",label:"\u5730\u9EDE",val:evt.location||""},{icon:"\uD83D\uDC65",label:"\u8207\u6703\u8005",val:getAttendees(evt)}];
+rows.forEach(function(r){if(!r.val)return;h+='<div style="display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f5f4f1"><span style="font-size:'+(fs.d+2)+'px">'+r.icon+'</span><div><div style="font-size:'+fs.lb+'px;color:#aaa;font-weight:500">'+r.label+'</div><div style="font-size:'+fs.d+'px;color:#2d2d2d;margin-top:2px;line-height:1.5;white-space:pre-wrap">'+r.val+'</div></div></div>'});
+h+='<div style="display:flex;gap:8px;margin-top:24px"><button style="flex:1;padding:14px;border-radius:14px;background:#1a1a1a;color:#fff;font-size:'+fs.b+'px;font-weight:500;border:none" onclick="openEdit(S.events.find(function(e){return e.id===\''+evt.id+'\'}))">\u270F\uFE0F \u7DE8\u8F2F</button>';
+if(S.confirmDel===evt.id){h+='<button style="flex:1;padding:14px;border-radius:14px;background:#ef4444;color:#fff;font-size:'+fs.b+'px;font-weight:500;border:none" onclick="deleteEvent(\''+evt.id+'\')">\u78BA\u8A8D\u522A\u9664\uFF1F</button>'}else{h+='<button style="flex:1;padding:14px;border-radius:14px;background:#fff;color:#ef4444;font-size:'+fs.b+'px;font-weight:500;border:1px solid #fecaca" onclick="S.confirmDel=\''+evt.id+'\';render()">\uD83D\uDDD1\uFE0F \u522A\u9664</button>'}
+h+='</div></div></div>'}}
 
-function initTokenClient() {
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: S.clientId,
-    scope: SCOPES,
-    callback: function(resp) {
-      if (resp.error) { S.error="登入失敗: "+resp.error; render(); return; }
-      S.token = resp.access_token;
-      fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+S.token}})
-        .then(function(r){return r.json()})
-        .then(function(u){
-          S.user = {name:u.name, email:u.email, picture:u.picture};
-          S.page = "main"; render(); fetchCalendar();
-        }).catch(function(){ S.page="main"; render(); fetchCalendar(); });
-    }
-  });
-}
+// ===== FORM SHEET =====
+if(S.showForm){
+h+='<div class="overlay" onclick="S.showForm=false;render()"><div class="sheet" onclick="event.stopPropagation()">';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-size:'+(fs.t+2)+'px;font-weight:600;color:#1a1a1a">'+(S.editId?'\u7DE8\u8F2F\u884C\u7A0B':'\u65B0\u589E\u884C\u7A0B')+'</div><button style="font-size:20px;color:#ccc;background:transparent;border:none" onclick="S.showForm=false;render()">\u2715</button></div>';
+h+='<label class="flabel">\u6A19\u984C *</label><input class="finput" style="font-size:'+fs.b+'px" id="fTitle" value="'+S.form.title.replace(/"/g,'&quot;')+'" oninput="S.form.title=this.value" placeholder="\u4F8B\uFF1A\u5718\u968A\u6703\u8B70">';
+h+='<label class="flabel">\u65E5\u671F</label><input type="date" class="finput" style="font-size:'+fs.b+'px" value="'+S.form.date+'" oninput="S.form.date=this.value">';
+h+='<div style="display:flex;align-items:center;gap:8px;margin-top:14px"><button style="width:22px;height:22px;border-radius:6px;border:2px solid '+(S.form.allDay?'#1a1a1a':'#ddd')+';background:'+(S.form.allDay?'#1a1a1a':'transparent')+';color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center" onclick="S.form.allDay=!S.form.allDay;render()">'+(S.form.allDay?'\u2713':'')+'</button><span style="font-size:'+fs.b+'px;color:#666">\u6574\u5929</span></div>';
+if(!S.form.allDay){h+='<div style="display:flex;gap:8px;margin-top:8px"><div style="flex:1"><label class="flabel">\u958B\u59CB</label><input type="time" class="finput" style="font-size:'+fs.b+'px" value="'+S.form.start+'" oninput="S.form.start=this.value"></div><div style="flex:1"><label class="flabel">\u7D50\u675F</label><input type="time" class="finput" style="font-size:'+fs.b+'px" value="'+S.form.end+'" oninput="S.form.end=this.value"></div></div>'}
+h+='<label class="flabel">\uD83D\uDC64 \u767C\u8D77\u4EBA</label><input class="finput" style="font-size:'+fs.b+'px" value="'+S.form.organizer.replace(/"/g,'&quot;')+'" oninput="S.form.organizer=this.value" placeholder="\u4F8B\uFF1A\u738B\u7D93\u7406">';
+h+='<label class="flabel">\uD83D\uDCDD \u5167\u5BB9</label><textarea class="finput" style="font-size:'+fs.b+'px;resize:vertical" rows="3" oninput="S.form.desc=this.value" placeholder="\u6703\u8B70\u5167\u5BB9\u6216\u5099\u8A3B...">'+S.form.desc+'</textarea>';
+h+='<label class="flabel">\uD83D\uDCCD \u5730\u9EDE</label><input class="finput" style="font-size:'+fs.b+'px" value="'+S.form.loc.replace(/"/g,'&quot;')+'" oninput="S.form.loc=this.value" placeholder="\u4F8B\uFF1A3F \u6703\u8B70\u5BA4">';
+h+='<label class="flabel">\uD83D\uDC65 \u9080\u8ACB\u8207\u6703\u8005 <span style="font-weight:400;color:#ccc">(\u7528\u9017\u865F\u5206\u9694 email)</span></label><input class="finput" style="font-size:'+fs.b+'px" value="'+S.form.attendees.replace(/"/g,'&quot;')+'" oninput="S.form.attendees=this.value" placeholder="abc@gmail.com, xyz@gmail.com">';
+h+='<button style="width:100%;padding:16px;border-radius:14px;background:#1a1a1a;color:#fff;font-size:'+fs.b+'px;font-weight:600;border:none;margin-top:24px;opacity:'+(S.saving?'.5':'1')+'" onclick="saveForm()" '+(S.saving?'disabled':'')+'>'+(S.saving?'\u8655\u7406\u4E2D...':(S.editId?'\u5132\u5B58\u8B8A\u66F4':'\u65B0\u589E\u884C\u7A0B'))+'</button>';
+h+='</div></div>'}
 
-function doLogin() {
-  if (!tokenClient) initTokenClient();
-  tokenClient.requestAccessToken({prompt:"consent"});
-}
+app.innerHTML=h}
 
-function doLogout() {
-  if (S.token) google.accounts.oauth2.revoke(S.token);
-  S.token=null; S.user=null; S.events=null; S.page="login"; render();
-}
+function toggleKey(k){S[k]=!S[k];render()}
+function setDays(v){S.days=Number(v);if(S.token)fetchCalendar();else render()}
+function setAuto(v){S.autoMin=Number(v);setupTimer();render()}
+function setFS(v){S.fontSize=v;try{localStorage.setItem("gcal_fs",v)}catch(e){}render()}
+function setTab(t){S.tab=t;render()}
+function saveClientId(){var el=document.getElementById("cidInput");var v=el?el.value.trim():"";if(!v||v.indexOf(".apps.googleusercontent.com")===-1){S.error="\u8ACB\u8F38\u5165\u6709\u6548\u7684 Client ID";render();return}S.clientId=v;try{localStorage.setItem("gcal_cid",v)}catch(e){}S.error=null;S.page="login";loadGIS().then(function(){initTokenClient();render()})}
 
-/* ===== 行事曆 ===== */
-function fetchCalendar() {
-  if (!S.token) return;
-  S.loading=true; S.error=null; render();
-  var now=new Date(), end=new Date(now);
-  end.setDate(end.getDate()+S.days);
-  return fetch(GCAL_API+"/calendars/primary/events?timeMin="+now.toISOString()
-    +"&timeMax="+end.toISOString()+"&singleEvents=true&orderBy=startTime&maxResults=100",
-    {headers:{Authorization:"Bearer "+S.token}})
-    .then(function(r){
-      if(r.status===401){S.error="登入已過期，請重新登入";S.page="login";S.token=null;S.loading=false;render();return;}
-      return r.json();
-    }).then(function(data){
-      if(!data)return;
-      S.events=data.items||[]; S.lastUpdate=new Date();
-      return fetchWeather();
-    }).then(function(){S.loading=false;render()})
-    .catch(function(e){S.error="載入失敗: "+e.message;S.loading=false;render();});
-}
-
-function setupTimer(){if(tmr)clearInterval(tmr);if(S.autoMin>0)tmr=setInterval(fetchCalendar,S.autoMin*60000);}
-
-function groupByDate(evts,days){
-  var g={},t=new Date();
-  for(var i=0;i<days;i++){var d=new Date(t);d.setDate(d.getDate()+i);g[d.toISOString().split("T")[0]]=[];}
-  for(var j=0;j<evts.length;j++){var e=evts[j],s=(e.start&&(e.start.dateTime||e.start.date))||"",k=s.substring(0,10);if(g[k])g[k].push(e);}
-  for(var key in g)g[key].sort(function(a,b){if(iA(a)&&!iA(b))return-1;if(!iA(a)&&iA(b))return 1;return((a.start&&a.start.dateTime)||"").localeCompare((b.start&&b.start.dateTime)||"");});
-  return g;
-}
-
-/* ===== 畫面 ===== */
-function render(){
-  var app=document.getElementById("app");
-
-  // === 載入中 ===
-  if(S.page==="loading"){
-    app.innerHTML='<div class="login-screen"><div class="login-icon">⏳</div><div class="login-title">載入中...</div></div>';
-    return;
-  }
-
-  // === 設定 Client ID ===
-  if(S.page==="setup"){
-    app.innerHTML='<div style="padding:20px">'
-      +'<div style="text-align:center;padding:30px 0 20px">'
-      +'<div style="font-size:48px;margin-bottom:12px">🔧</div>'
-      +'<div style="font-size:22px;font-weight:300">初始設定</div>'
-      +'<div style="font-size:13px;color:#aaa;margin-top:6px">需要 Google OAuth Client ID</div></div>'
-      +'<div class="setup-box"><h3>📋 如何取得 Client ID</h3><ol>'
-      +'<li>前往 <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console</a></li>'
-      +'<li>建立專案並啟用 <strong>Google Calendar API</strong></li>'
-      +'<li>建立 <strong>OAuth 2.0 Client ID</strong>（網頁應用程式）</li>'
-      +'<li>在「已授權 JavaScript 來源」加入本網址</li>'
-      +'<li>複製 Client ID 貼到下方</li></ol>'
-      +'<input class="cid-input" id="cidInput" placeholder="貼上 Client ID (xxx.apps.googleusercontent.com)">'
-      +'<button class="cid-save" onclick="saveClientId()">儲存並繼續</button></div>'
-      +(S.error?'<div class="err">⚠️ '+S.error+'</div>':'')
-      +'</div>';
-    return;
-  }
-
-  // === 登入頁 ===
-  if(S.page==="login"){
-    app.innerHTML='<div class="login-screen">'
-      +'<div class="login-icon">📅</div>'
-      +'<div class="login-title">行事曆天氣助手</div>'
-      +'<div class="login-desc">登入 Google 帳號後即可查看行事曆與天氣預報</div>'
-      +'<button class="g-btn" onclick="doLogin()">'
-      +'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>'
-      +'<path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>'
-      +'<path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>'
-      +'<path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'
-      +'使用 Google 帳號登入</button>'
-      +'<div style="margin-top:24px;font-size:12px;color:#ccc">'
-      +'<span style="cursor:pointer;text-decoration:underline" onclick="S.page=\'setup\';S.error=null;render()">重新設定 Client ID</span></div>'
-      +(S.error?'<div class="err" style="margin-top:16px">⚠️ '+S.error+'</div>':'')
-      +'</div>';
-    return;
-  }
-
-  // === 主畫面 ===
-  var tk=tK(), td=new Date(), cw=S.weather&&S.weather.current_weather;
-  var tw=S.weather&&S.weather.daily?{
-    code:S.weather.daily.weathercode[0], max:S.weather.daily.temperature_2m_max[0],
-    min:S.weather.daily.temperature_2m_min[0], rain:S.weather.daily.precipitation_probability_max[0],
-    uv:S.weather.daily.uv_index_max?S.weather.daily.uv_index_max[0]:0
-  }:null;
-  var grouped=S.events?groupByDate(S.events,S.days):null;
-  var h='';
-
-  // Header
-  h+='<div class="header"><div><div class="date-num">'+td.getDate()+'</div>'
-    +'<div class="date-sub">'+MZ[td.getMonth()]+' · '+DZ[td.getDay()]+'</div></div>'
-    +'<div class="top-right">'+(S.user&&S.user.picture?'<img class="avatar" src="'+S.user.picture+'" referrerpolicy="no-referrer">':'')
-    +'<button class="sb" onclick="toggleKey(\'showSettings\')">'+(S.showSettings?'✕':'⚙')+'</button></div></div>';
-
-  // User bar
-  if(S.user) h+='<div class="user-bar"><span class="nm">'+(S.user.name||S.user.email)+'</span><button class="lo" onclick="doLogout()">登出</button></div>';
-
-  // Settings
-  if(S.showSettings){
-    h+='<div class="sp"><div class="sl">顯示天數</div><div class="srow">';
-    [1,3,5,7].forEach(function(d){h+='<button class="sbt '+(S.days===d?"a":"")+'" onclick="setDays('+d+')">'+d+'天</button>';});
-    h+='</div><div class="sl">自動更新</div><div class="srow">';
-    [{v:0,l:"關閉"},{v:15,l:"15 分"},{v:30,l:"30 分"},{v:60,l:"1 小時"}].forEach(function(o){
-      h+='<button class="sbt '+(S.autoMin===o.v?"a":"")+'" onclick="setAuto('+o.v+')">'+o.l+'</button>';
-    });
-    h+='</div><div class="sl">位置</div><div style="display:flex;align-items:center;gap:8px;margin-top:8px">'
-      +'<span style="font-size:13px;color:#666">'+(S.locLoading?'定位中...':'📍 '+S.loc.name)+'</span>'
-      +'<button style="padding:6px 14px;border-radius:8px;border:1px solid #eee;background:#fff;font-size:12px;color:#999" onclick="detectLoc()">重新定位</button></div></div>';
-  }
-
-  // Weather
-  var wIcon=cw?wI(cw.weathercode).i:tw?wI(tw.code).i:'🌡️';
-  var wTemp=cw?Math.round(cw.temperature)+'°':tw?Math.round(tw.max)+'°':'—';
-  var wLabel=cw?wI(cw.weathercode).l:tw?wI(tw.code).l:'';
-  h+='<div class="wb" onclick="toggleKey(\'showWeather\')"><div class="wt"><div class="wl"><span class="wi">'+wIcon+'</span>'
-    +'<div><div class="wtp">'+wTemp+'</div><div class="wds">'+wLabel+' · '+S.loc.name+'</div></div></div>'
-    +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'
-    +(tw?'<span class="wp" style="background:#f0f7ff;color:#7ba7d4">💧 '+tw.rain+'%</span>':'')
-    +(tw&&tw.uv>=6?'<span class="wp" style="background:#fff8ee;color:#d4a54a">UV '+Math.round(tw.uv)+'</span>':'')
-    +'</div></div><div class="wtg">'+(S.showWeather?'收起預報 ▲':'展開多日預報 ▼')+'</div></div>';
-
-  // Forecast detail
-  if(S.showWeather&&S.weather&&S.weather.daily){
-    var wd=S.weather.daily;
-    h+='<div class="wdt"><div class="frow">';
-    wd.time.slice(0,Math.min(S.days+1,7)).forEach(function(d,i){
-      var info=wI(wd.weathercode[i]), isT=d===tk;
-      h+='<div class="fd"><div class="fdl '+(isT?'today':'')+'">'+(isT?'今天':fD(d))+'</div>'
-        +'<div class="fdi">'+info.i+'</div><div class="fdm">'+Math.round(wd.temperature_2m_max[i])+'°</div>'
-        +'<div class="fdn">'+Math.round(wd.temperature_2m_min[i])+'°</div>'
-        +'<div class="fdr">'+wd.precipitation_probability_max[i]+'%</div></div>';
-    });
-    h+='</div></div>';
-  }
-
-  // Refresh button
-  h+='<button class="rb" onclick="fetchCalendar()" '+(S.loading?'disabled':'')+'>'
-    +(S.loading?'同步行事曆中 ...':'🔄 同步行事曆')+'</button>';
-
-  if(S.error) h+='<div class="err">⚠️ '+S.error+'</div>';
-
-  // Events
-  h+='<div class="ev">';
-  if(!S.events&&!S.loading) h+='<div class="ph"><div class="phi">✦</div><div class="pht">點擊上方按鈕同步行程</div></div>';
-  if(grouped){
-    Object.keys(grouped).forEach(function(date,di){
-      var evts=grouped[date], isT=date===tk, d=new Date(date);
-      var label=isT?"Today":(d.getMonth()+1)+"/"+d.getDate()+" "+DZ[d.getDay()];
-      h+='<div class="dlab">'+label+'</div>';
-      if(!evts.length) h+='<div class="emp">沒有行程</div>';
-      else evts.forEach(function(evt,i){
-        var title=evt.summary||'（無標題）', ad=iA(evt);
-        var st=evt.start&&evt.start.dateTime, et=evt.end&&evt.end.dateTime;
-        var c=CL[(di*3+i)%CL.length];
-        h+='<div class="ec"><div class="ebar" style="background:'+c+'"></div><div style="flex:1">'
-          +'<div class="etit">'+title+'</div>'
-          +'<div class="etm">'+(ad?'整天':st?fT(st)+(et?' – '+fT(et):''):'')+'</div>'
-          +(evt.location?'<div class="eloc">📍 '+evt.location+'</div>':'')
-          +'</div></div>';
-      });
-    });
-  }
-  h+='</div>';
-
-  // Footer
-  if(S.lastUpdate) h+='<div class="ft">最後同步 '+S.lastUpdate.toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"})
-    +(S.autoMin>0?' · 每 '+S.autoMin+' 分鐘自動更新':'')+'</div>';
-
-  app.innerHTML = h;
-}
-
-/* ===== 工具函式 ===== */
-function toggleKey(k) { S[k]=!S[k]; render(); }
-function setDays(d) { S.days=d; if(S.token) fetchCalendar(); else render(); }
-function setAuto(v) { S.autoMin=v; setupTimer(); render(); }
-
-function saveClientId() {
-  var el = document.getElementById("cidInput");
-  var v = el ? el.value.trim() : "";
-  if (!v || v.indexOf(".apps.googleusercontent.com") === -1) {
-    S.error = "請輸入有效的 Client ID"; render(); return;
-  }
-  S.clientId = v;
-  try { localStorage.setItem("gcal_cid", v); } catch(e) {}
-  S.error = null; S.page = "login";
-  loadGIS().then(function(){ initTokenClient(); render(); });
-}
-
-/* ===== 初始化 ===== */
-function init() {
-  try { S.clientId = localStorage.getItem("gcal_cid"); } catch(e) {}
-  if (!S.clientId) { S.page = "setup"; render(); return; }
-  S.page = "login";
-  loadGIS().then(function(){ initTokenClient(); render(); });
-  detectLoc();
-  fetchWeather().then(render);
-}
-
+function init(){try{S.clientId=localStorage.getItem("gcal_cid");S.fontSize=localStorage.getItem("gcal_fs")||"medium"}catch(e){}loadMemos();if(!S.clientId){S.page="setup";render();return}S.page="login";loadGIS().then(function(){initTokenClient();render()});detectLoc();fetchWeather().then(render)}
 init();
 </script>
 </body>
