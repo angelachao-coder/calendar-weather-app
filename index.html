@@ -109,7 +109,10 @@ function doLogout(){if(S.token){try{google.accounts.oauth2.revoke(S.token)}catch
 render()}
 
 // ===== CALENDAR CRUD =====
-function fetchCalendar(){if(!S.token){silentRefresh();return}S.loading=true;S.error=null;render();var now=new Date();now.setHours(0,0,0,0);var end=new Date(now);end.setDate(end.getDate()+S.days);return fetch(GCAL_API+"/calendars/primary/events?timeMin="+now.toISOString()+"&timeMax="+end.toISOString()+"&singleEvents=true&orderBy=startTime&maxResults=100",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){if(r.status===401||r.status===403){S.loading=false;S.error=null;try{localStorage.removeItem("gcal_token")}catch(e){}S.token=null;silentRefresh();return null}return r.json()}).then(function(data){if(!data)return;S.events=data.items||[];S.lastUpdate=new Date();return fetchWeather()}).then(function(){S.loading=false;render()}).catch(function(e){S.error="\u8F09\u5165\u5931\u6557: "+e.message;S.loading=false;render()})}
+function fetchCalendar(){if(!S.token){S.page="login";render();return}S.loading=true;S.error=null;render();var now=new Date();now.setHours(0,0,0,0);var end=new Date(now);end.setDate(end.getDate()+S.days);return fetch(GCAL_API+"/calendars/primary/events?timeMin="+now.toISOString()+"&timeMax="+end.toISOString()+"&singleEvents=true&orderBy=startTime&maxResults=100",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){if(r.status===401||r.status===403){S.loading=false;try{localStorage.removeItem("gcal_token")}catch(e){}S.token=null;
+// Try silent refresh first
+if(tokenClient){try{tokenClient.requestAccessToken({prompt:""});return null}catch(e){}}
+S.page="login";S.error="\u767B\u5165\u5DF2\u904E\u671F\uFF0C\u8ACB\u91CD\u65B0\u767B\u5165";render();return null}return r.json()}).then(function(data){if(!data)return;S.events=data.items||[];S.lastUpdate=new Date();return fetchWeather()}).then(function(){S.loading=false;render()}).catch(function(e){S.error="\u8F09\u5165\u5931\u6557: "+e.message;S.loading=false;render()})}
 
 function getDomain(){return S.user&&S.user.email?S.user.email.split("@")[1]:"gmail.com"}
 function expandEmails(str){var domain=getDomain();return str.split(/[,;\s]+/).filter(Boolean).map(function(e){e=e.trim();if(e.indexOf("@")===-1)e=e+"@"+domain;return e}).join(", ")}
@@ -133,17 +136,8 @@ function openNew(){S.editId=null;var orgName="";if(S.user){orgName=S.user.name||
 function openDetail(id){S.detailId=id;S.confirmDel=null;render()}
 function openEdit(evt){S.editId=evt.id;var sd=evt.start.dateTime?evt.start.dateTime.substring(0,10):(evt.start.date||tK());var st=evt.start.dateTime?fT(evt.start.dateTime):"09:00";var et=evt.end&&evt.end.dateTime?fT(evt.end.dateTime):"10:00";S.form={title:evt.summary||"",date:sd,start:st,end:et,organizer:getOrg(evt),desc:getDesc(evt),loc:evt.location||"",allDay:iA(evt),attendees:getAttendeesStr(evt)};S.showForm=true;S.detailId=null;render()}
 
-// ===== VISIBILITY CHANGE — auto refresh when app comes back =====
-document.addEventListener("visibilitychange",function(){if(!document.hidden&&S.page==="main"){
-// Only try to fetch if we have a token, otherwise just refresh weather
-if(S.token){
-// Test if token is still valid first
-fetch("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+S.token).then(function(r){
-if(r.ok){fetchCalendar()}else{silentRefresh()}
-}).catch(function(){silentRefresh()})
-}else{silentRefresh()}
-fetchWeather().then(render);
-}});
+// ===== VISIBILITY CHANGE =====
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&S.page==="main"&&S.token){fetchCalendar()}});
 
 // ===== RENDER =====
 function render(){var app=document.getElementById("app"),fs=f();
@@ -160,15 +154,19 @@ var h="";
 // Header
 h+='<div class="header"><div><div style="font-size:'+fs.dn+'px;font-weight:200;color:#1a1a1a;line-height:1;letter-spacing:-2px">'+td.getDate()+'</div><div style="font-size:'+(fs.b-1)+'px;color:#aaa;margin-top:4px">'+MZ[td.getMonth()]+' \xB7 '+DZ[td.getDay()]+'</div></div><div class="top-right">'+(S.user&&S.user.picture?'<img class="avatar" src="'+S.user.picture+'" referrerpolicy="no-referrer">':'')+'<button class="sb" onclick="toggleKey(\'showSettings\')">'+(S.showSettings?'\u2715':'\u2699')+'</button></div></div>';
 
-// User bar - always show
+// User bar
 var uName=(S.user&&S.user.name)?S.user.name:"";
 var uEmail=(S.user&&S.user.email)?S.user.email:"";
 var uPic=(S.user&&S.user.picture)?S.user.picture:"";
+if(uName||uEmail){
 h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px">';
 if(uPic)h+='<img style="width:28px;height:28px;border-radius:50%" src="'+uPic+'" referrerpolicy="no-referrer">';
-h+='<div style="flex:1"><div style="font-weight:500;color:#2d2d2d">'+(uName||uEmail||"\u8F09\u5165\u5E33\u865F\u4E2D...")+'</div>';
-if(uEmail&&uName)h+='<div style="font-size:'+(fs.b-3)+'px;color:#aaa;margin-top:2px">'+uEmail+'</div>';
+h+='<div style="flex:1"><div style="font-weight:500;color:#2d2d2d">'+uName+'</div>';
+if(uEmail)h+='<div style="font-size:'+(fs.b-3)+'px;color:#aaa;margin-top:2px">'+uEmail+'</div>';
 h+='</div><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>';
+}else{
+h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px"><div style="flex:1;color:#aaa">\u5C1A\u672A\u53D6\u5F97\u5E33\u865F\u8CC7\u8A0A</div><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>';
+}
 
 // Settings
 if(S.showSettings){h+='<div class="sp">';
@@ -264,26 +262,19 @@ var u=localStorage.getItem("gcal_user");
 if(u)S.user=JSON.parse(u);
 }catch(e){}
 loadMemos();
-if(!S.clientId){S.page="setup";render();return}
 detectLoc();fetchWeather().then(render);
-if(S.token){
-S.page="main";render();
+if(!S.clientId){S.page="setup";render();return}
 loadGIS().then(function(){
-// Delay slightly to ensure GIS fully initialized
 setTimeout(function(){
 initTokenClient();
-// Verify token by fetching user info
-fetchUserInfo(function(){
-render();
-fetchCalendar();
-});
-},300);
-});
-return;
+if(S.token&&S.user&&S.user.email){
+// Have saved token + user, go to main and try to use it
+S.page="main";startAutoRefresh();render();fetchCalendar();
+}else{
+// No valid session, show login
+S.page="login";render();
 }
-S.page="login";
-loadGIS().then(function(){
-setTimeout(function(){initTokenClient();render()},300);
+},200);
 });
 }
 init();
