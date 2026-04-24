@@ -95,10 +95,8 @@ function fetchWeather(){return fetch(WEATHER_URL+"?latitude="+S.loc.lat+"&longit
 function loadGIS(){return new Promise(function(resolve){if(window.google&&window.google.accounts){resolve();return}var s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.onload=resolve;s.onerror=function(){S.error="\u7121\u6CD5\u8F09\u5165 Google";render()};document.head.appendChild(s)})}
 
 function initTokenClient(){tokenClient=google.accounts.oauth2.initTokenClient({client_id:S.clientId,scope:SCOPES,callback:function(resp){if(resp.error){S.error="\u767B\u5165\u5931\u6557: "+resp.error;S.refreshing=false;render();return}S.token=resp.access_token;try{localStorage.setItem("gcal_token",resp.access_token)}catch(e){}
-// If this was a silent refresh, just re-fetch calendar
-if(S.refreshing){S.refreshing=false;fetchCalendar();return}
-// Otherwise fetch user info
-fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){return r.json()}).then(function(u){S.user={name:u.name||"",email:u.email||"",picture:u.picture||""};try{localStorage.setItem("gcal_user",JSON.stringify(S.user))}catch(e){}S.page="main";render();fetchCalendar()}).catch(function(){S.page="main";render();fetchCalendar()})}})}
+// Always fetch user info to keep it fresh
+fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){return r.json()}).then(function(u){if(u&&(u.name||u.email)){S.user={name:u.name||"",email:u.email||"",picture:u.picture||""};try{localStorage.setItem("gcal_user",JSON.stringify(S.user))}catch(e){}}S.page="main";S.refreshing=false;render();fetchCalendar()}).catch(function(){S.page="main";S.refreshing=false;render();fetchCalendar()})}})}
 
 function doLogin(){if(!tokenClient)initTokenClient();tokenClient.requestAccessToken({prompt:"consent"})}
 
@@ -249,9 +247,12 @@ if(u)S.user=JSON.parse(u);
 }catch(e){}
 loadMemos();
 if(!S.clientId){S.page="setup";render();return}
-if(S.token&&S.user){
+if(S.token&&S.user&&S.user.email){
 S.page="main";
-loadGIS().then(function(){initTokenClient();render();fetchCalendar()});
+loadGIS().then(function(){initTokenClient();
+// Refresh user info on every startup
+fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+S.token}}).then(function(r){return r.json()}).then(function(u){if(u&&(u.name||u.email)){S.user={name:u.name||"",email:u.email||"",picture:u.picture||""};try{localStorage.setItem("gcal_user",JSON.stringify(S.user))}catch(e){}}render();fetchCalendar()}).catch(function(){fetchCalendar()});
+});
 detectLoc();fetchWeather().then(render);
 return;
 }
