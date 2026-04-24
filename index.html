@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="行事曆助手">
+<meta name="apple-mobile-web-app-title" content="超級小助手">
 <meta name="theme-color" content="#FAFAF8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%236366f1'/%3E%3Crect x='80' y='140' width='352' height='292' rx='32' fill='white' opacity='.95'/%3E%3Crect x='80' y='100' width='352' height='80' rx='32' fill='white'/%3E%3Ccircle cx='176' cy='100' r='20' fill='%236366f1'/%3E%3Ccircle cx='336' cy='100' r='20' fill='%236366f1'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%236366f1'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white'%3E%F0%9F%93%85%3C/text%3E%3C/svg%3E">
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi6KGM5LqL5pqG5aSp5rCj5Yqp5omLIiwic2hvcnRfbmFtZSI6IuihjOS6i+abnCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRkFGQUY4IiwidGhlbWVfY29sb3IiOiIjNjM2NmYxIn0=">
-<title>行事曆天氣助手</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi6LaF57Sa5bCP5Yqp5omLIiwic2hvcnRfbmFtZSI6Iui2hee0muWwj+WKqeaJiyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRkFGQUY4IiwidGhlbWVfY29sb3IiOiIjNjM2NmYxIn0=">
+<title>超級小助手</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,'Noto Sans TC','Helvetica Neue',sans-serif;background:#FAFAF8;color:#2d2d2d;max-width:480px;margin:0 auto;min-height:100vh;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overscroll-behavior:none}
@@ -151,8 +151,15 @@ var h="";
 // Header
 h+='<div class="header"><div><div style="font-size:'+fs.dn+'px;font-weight:200;color:#1a1a1a;line-height:1;letter-spacing:-2px">'+td.getDate()+'</div><div style="font-size:'+(fs.b-1)+'px;color:#aaa;margin-top:4px">'+MZ[td.getMonth()]+' \xB7 '+DZ[td.getDay()]+'</div></div><div class="top-right">'+(S.user&&S.user.picture?'<img class="avatar" src="'+S.user.picture+'" referrerpolicy="no-referrer">':'')+'<button class="sb" onclick="toggleKey(\'showSettings\')">'+(S.showSettings?'\u2715':'\u2699')+'</button></div></div>';
 
-// User bar - always show when on main page
-if(S.page==="main"){var uName=(S.user&&S.user.name)?S.user.name:"";var uEmail=(S.user&&S.user.email)?S.user.email:"";var uPic=(S.user&&S.user.picture)?S.user.picture:"";h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px">'+(uPic?'<img style="width:28px;height:28px;border-radius:50%" src="'+uPic+'" referrerpolicy="no-referrer">':'')+'<div style="flex:1"><div style="font-weight:500;color:#2d2d2d">'+(uName||uEmail||"\u8F09\u5165\u4E2D...")+'</div>'+(uEmail?'<div style="font-size:'+(fs.b-3)+'px;color:#aaa;margin-top:2px">'+uEmail+'</div>':'')+'</div><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>'}
+// User bar - always show
+var uName=(S.user&&S.user.name)?S.user.name:"";
+var uEmail=(S.user&&S.user.email)?S.user.email:"";
+var uPic=(S.user&&S.user.picture)?S.user.picture:"";
+h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px">';
+if(uPic)h+='<img style="width:28px;height:28px;border-radius:50%" src="'+uPic+'" referrerpolicy="no-referrer">';
+h+='<div style="flex:1"><div style="font-weight:500;color:#2d2d2d">'+(uName||uEmail||"\u8F09\u5165\u5E33\u865F\u4E2D...")+'</div>';
+if(uEmail&&uName)h+='<div style="font-size:'+(fs.b-3)+'px;color:#aaa;margin-top:2px">'+uEmail+'</div>';
+h+='</div><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>';
 
 // Settings
 if(S.showSettings){h+='<div class="sp">';
