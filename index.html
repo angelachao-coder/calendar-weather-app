@@ -102,7 +102,7 @@ function fetchUserInfo(cb){fetch("https://www.googleapis.com/oauth2/v2/userinfo"
 
 function doLogin(){if(!tokenClient)initTokenClient();tokenClient.requestAccessToken({prompt:"consent"})}
 
-function silentRefresh(){S.refreshing=true;if(!tokenClient)initTokenClient();tokenClient.requestAccessToken({prompt:""})}
+function silentRefresh(){if(S.refreshing)return;S.refreshing=true;if(!tokenClient){try{initTokenClient()}catch(e){S.refreshing=false;S.page="login";render();return}}try{tokenClient.requestAccessToken({prompt:""})}catch(e){S.refreshing=false;S.page="login";S.token=null;try{localStorage.removeItem("gcal_token")}catch(ex){}render()}}
 
 function doLogout(){if(S.token){try{google.accounts.oauth2.revoke(S.token)}catch(e){}}S.token=null;S.user=null;S.events=null;S.page="login";try{localStorage.removeItem("gcal_token");localStorage.removeItem("gcal_user")}catch(e){}
 // NOTE: memos are NOT cleared on logout
@@ -134,7 +134,16 @@ function openDetail(id){S.detailId=id;S.confirmDel=null;render()}
 function openEdit(evt){S.editId=evt.id;var sd=evt.start.dateTime?evt.start.dateTime.substring(0,10):(evt.start.date||tK());var st=evt.start.dateTime?fT(evt.start.dateTime):"09:00";var et=evt.end&&evt.end.dateTime?fT(evt.end.dateTime):"10:00";S.form={title:evt.summary||"",date:sd,start:st,end:et,organizer:getOrg(evt),desc:getDesc(evt),loc:evt.location||"",allDay:iA(evt),attendees:getAttendeesStr(evt)};S.showForm=true;S.detailId=null;render()}
 
 // ===== VISIBILITY CHANGE — auto refresh when app comes back =====
-document.addEventListener("visibilitychange",function(){if(!document.hidden&&S.page==="main"&&S.token){fetchCalendar()}});
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&S.page==="main"){
+// Only try to fetch if we have a token, otherwise just refresh weather
+if(S.token){
+// Test if token is still valid first
+fetch("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+S.token).then(function(r){
+if(r.ok){fetchCalendar()}else{silentRefresh()}
+}).catch(function(){silentRefresh()})
+}else{silentRefresh()}
+fetchWeather().then(render);
+}});
 
 // ===== RENDER =====
 function render(){var app=document.getElementById("app"),fs=f();
