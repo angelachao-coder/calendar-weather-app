@@ -151,8 +151,8 @@ var h="";
 // Header
 h+='<div class="header"><div><div style="font-size:'+fs.dn+'px;font-weight:200;color:#1a1a1a;line-height:1;letter-spacing:-2px">'+td.getDate()+'</div><div style="font-size:'+(fs.b-1)+'px;color:#aaa;margin-top:4px">'+MZ[td.getMonth()]+' \xB7 '+DZ[td.getDay()]+'</div></div><div class="top-right">'+(S.user&&S.user.picture?'<img class="avatar" src="'+S.user.picture+'" referrerpolicy="no-referrer">':'')+'<button class="sb" onclick="toggleKey(\'showSettings\')">'+(S.showSettings?'\u2715':'\u2699')+'</button></div></div>';
 
-// User bar with name AND email
-if(S.user){var uName=S.user.name||"";var uEmail=S.user.email||"";h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px"><div style="flex:1"><div style="font-weight:500;color:#2d2d2d">'+(uName||"\u4F7F\u7528\u8005")+'</div>'+(uEmail?'<div style="font-size:'+(fs.b-3)+'px;color:#aaa;margin-top:2px">'+uEmail+'</div>':'')+'</div><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>'}
+// User bar - always show when on main page
+if(S.page==="main"){var uName=(S.user&&S.user.name)?S.user.name:"";var uEmail=(S.user&&S.user.email)?S.user.email:"";var uPic=(S.user&&S.user.picture)?S.user.picture:"";h+='<div class="user-bar" style="font-size:'+(fs.b-1)+'px">'+(uPic?'<img style="width:28px;height:28px;border-radius:50%" src="'+uPic+'" referrerpolicy="no-referrer">':'')+'<div style="flex:1"><div style="font-weight:500;color:#2d2d2d">'+(uName||uEmail||"\u8F09\u5165\u4E2D...")+'</div>'+(uEmail?'<div style="font-size:'+(fs.b-3)+'px;color:#aaa;margin-top:2px">'+uEmail+'</div>':'')+'</div><button style="font-size:'+(fs.b-2)+'px;color:#bbb;padding:4px 10px;border-radius:8px;background:#fafaf8;border:1px solid #eee" onclick="doLogout()">\u767B\u51FA</button></div>'}
 
 // Settings
 if(S.showSettings){h+='<div class="sp">';
